@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "card-index"
+version = "0.1.0"
+description = "Displays the employee hierarchy in tree form."
+authors = ["Woolf <woolf.no1@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+litestar = {extras = ["standard"], version = "^2.12.1"}
+tortoise-orm = {extras = ["asyncpg"], version = "^0.21.7"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
