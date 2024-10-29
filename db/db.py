@@ -1,5 +1,7 @@
+from tortoise import Tortoise, connections
 from pydantic import BaseModel
 from typing import ForwardRef
+from settings import settings
 import datetime
 import uuid
 from decimal import Decimal
@@ -28,3 +30,10 @@ employes = [
     boss,
     Employee(id=uuid.uuid4(), boss=boss, first_name="Tomara", middle_name="Ivanovna",  last_name="Shpak",   position=positions[0], start_date=datetime.date(2024, 5, 2), salary=Decimal(500)),
 ]
+
+async def init_tortoise()->None:
+    await Tortoise.init(db_url=settings.DATABASE_URL, modules={"models": ["models.models"]})
+    await Tortoise.generate_schemas()
+
+async def shutdown_tortoise()->None:
+    await connections.close_all()

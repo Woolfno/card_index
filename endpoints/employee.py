@@ -1,4 +1,4 @@
-from model import model
+from models import models
 from db import db
 import uuid
 from litestar import Controller, get, post, delete
@@ -10,18 +10,18 @@ class EmployeeController(Controller):
     path = "/"
 
     @get("/")
-    async def list(self)->model.Employee:
+    async def list(self)->models.Employee:
         return db.employes
     
     @get("/{id:uuid}")
-    async def get_by_id(self, id:uuid.UUID)->model.Employee:
+    async def get_by_id(self, id:uuid.UUID)->models.Employee:
         for emp in db.employes:
             if id==emp.id:
                 return emp
         raise HTTPException(status_code=HTTP_404_NOT_FOUND)
     
     @post()
-    async def create(self, data:db.Employee)->model.Employee:
+    async def create(self, data:db.Employee)->models.Employee:
         data.id=uuid.UUID()
         db.employes.append(data)
         return data
