@@ -1,10 +1,11 @@
-from tortoise import Tortoise, connections
-from settings import settings
-from schemas.schemas import Position, Employee
 import datetime
 import uuid
 from decimal import Decimal
 
+from tortoise import Tortoise, connections
+
+from schemas.schemas import Employee, Position
+from settings import settings
 
 positions=[Position(id=0, title="Accountant"), Position(id=1, title="CEO")]
 boss = Employee(id=uuid.uuid4(), first_name="Ivan",   middle_name="Petrovich", last_name="Smirnov", position=positions[1], start_date=datetime.date(2024, 1, 1), salary=Decimal(2500))
