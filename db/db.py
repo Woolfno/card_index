@@ -1,27 +1,9 @@
 from tortoise import Tortoise, connections
-from pydantic import BaseModel
-from typing import ForwardRef
 from settings import settings
+from schemas.schemas import Position, Employee
 import datetime
 import uuid
 from decimal import Decimal
-
-
-class Position(BaseModel):
-    id: int
-    title: str
-
-Employee = ForwardRef('Employee')
-
-class Employee(BaseModel):
-    id: uuid.UUID
-    boss: Employee = None
-    first_name: str
-    middle_name: str
-    last_name: str
-    position: Position
-    start_date: datetime.date
-    salary: Decimal
 
 
 positions=[Position(id=0, title="Accountant"), Position(id=1, title="CEO")]
