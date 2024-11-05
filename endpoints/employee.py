@@ -10,7 +10,7 @@ from models import models
 from schemas import schemas
 
 
-async def get_employee(emp:models.Employee)->models.Employee:
+async def get_employee(emp:models.Employee)->models.Employee:    
     emp.position = await models.Position.get_or_none(id=emp.position_id)
     emp.boss = await models.Employee.get_or_none(uuid=emp.boss_id).prefetch_related('position')    
     if emp.boss is None:
@@ -39,7 +39,8 @@ class EmployeeController(Controller):
         emp = await  models.Employee.get_or_none(uuid=id).prefetch_related('position', 'boss')
         if emp is None:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND)
-        emp.boss = await get_employee(emp.boss)
+        if emp.boss is not None:
+            emp.boss = await get_employee(emp.boss)
         return schemas.Employee.model_validate(emp)
     
     @post()

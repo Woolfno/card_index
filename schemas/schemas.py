@@ -3,7 +3,7 @@ import uuid
 from decimal import Decimal
 from typing import ForwardRef, Optional
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, computed_field
 
 
 class PositionBase(BaseModel):
@@ -32,8 +32,15 @@ class EmployeeBase(EmployeeId):
 class Employee(EmployeeBase):   
     model_config = ConfigDict(from_attributes=True)
 
-    boss: Optional[Employee] = None  
+    first_name: str = Field(exclude=True)
+    middle_name: str = Field(exclude=True)
+    last_name: str = Field(exclude=True)
+    boss: Optional[Employee] = None
     position: Position
+
+    @computed_field
+    def full_name(self)->str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"
 
 class EmployeeIn(BaseModel):
     first_name: str
