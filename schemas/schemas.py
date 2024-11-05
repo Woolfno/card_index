@@ -54,5 +54,12 @@ class EmployeeIn(BaseModel):
 class EmployeeAll(EmployeeBase):   
     model_config = ConfigDict(from_attributes=True)
 
-    boss_id: Optional[uuid.UUID] = None  
-    position: PositionIn
+    first_name: str = Field(exclude=True)
+    middle_name: str = Field(exclude=True)
+    last_name: str = Field(exclude=True)
+    boss_id: Optional[uuid.UUID] = None
+    position: Position
+
+    @computed_field
+    def full_name(self)->str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"

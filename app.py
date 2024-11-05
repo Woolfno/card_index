@@ -1,16 +1,30 @@
-from litestar import Litestar, Router
+from pathlib import Path
+
+import uvicorn
+from litestar import Litestar, Router, get
+from litestar.contrib.jinja import JinjaTemplateEngine
+from litestar.response import Template
+from litestar.template.config import TemplateConfig
+from litestar.static_files import create_static_files_router
+
+from db.db import init_tortoise, shutdown_tortoise
 from endpoints.employee import EmployeeController
 from endpoints.position import PositionController
-from db.db import init_tortoise, shutdown_tortoise
-import uvicorn
-from litestar import Litestar
 from settings import settings
+
+
+@get("/")
+async def index()->Template:
+    return Template(template_name="index.html")
 
 
 app = Litestar(    
     route_handlers=[
+        create_static_files_router(path="/static", directories=[Path(__file__).parent / "static"]),
+        index,
         Router(path="/", route_handlers=[EmployeeController, PositionController]),
     ],
+    template_config=TemplateConfig(directory=Path(__file__).parent / "template", engine=JinjaTemplateEngine),    
     on_startup=[init_tortoise],
     on_shutdown=[shutdown_tortoise],
     )
