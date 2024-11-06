@@ -16,4 +16,4 @@ class Employee(Model):
     last_name = fields.CharField(max_length=120)
     position = fields.ForeignKeyField("models.Position", related_name="employes")
     start_date = fields.DateField(default=datetime.datetime.now)
-    salary = fields.DecimalField(max_digits=2, decimal_places=2)
+    salary = fields.DecimalField(max_digits=8, decimal_places=2)
