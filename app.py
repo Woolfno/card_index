@@ -12,16 +12,22 @@ from endpoints.employee import EmployeeController
 from endpoints.position import PositionController
 from settings import settings
 
-
 @get("/")
 async def index()->Template:
     return Template(template_name="index.html")
 
+@get("/tree")
+async def tree()->Template:
+    return Template(template_name="tree.html")
+
+@get('/table')
+async def employees()->Template:
+    return Template(template_name='list.html')
 
 app = Litestar(    
     route_handlers=[
         create_static_files_router(path="/static", directories=[Path(__file__).parent / "static"]),
-        index,
+        index, tree, employees,
         Router(path="/", route_handlers=[EmployeeController, PositionController]),
     ],
     template_config=TemplateConfig(directory=Path(__file__).parent / "template", engine=JinjaTemplateEngine),    
