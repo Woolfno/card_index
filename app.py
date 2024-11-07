@@ -14,15 +14,15 @@ from settings import settings
 
 @get("/")
 async def index()->Template:
-    return Template(template_name="index.html")
+    return Template(template_name="index.html", context={"main":True})
 
 @get("/tree")
 async def tree()->Template:
-    return Template(template_name="tree.html")
+    return Template(template_name="tree.html", context={"tree":True})
 
 @get('/table')
 async def employees()->Template:
-    return Template(template_name='list.html')
+    return Template(template_name='table.html', context={"table":True})
 
 app = Litestar(    
     route_handlers=[
