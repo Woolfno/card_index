@@ -33,5 +33,5 @@ jwt_auth = JWTAuth[UserSchema](
     retrieve_user_handler=retrieve_user_handler,
     token_secret=settings.SECRET_KEY,
     default_token_expiration=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
-    exclude=["/signup", "/login", "/authenticate", "/schema"],
+    exclude=["/login", "/schema"],
 )
