@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "employee" (
     "middle_name" VARCHAR(120) NOT NULL,
     "last_name" VARCHAR(120) NOT NULL,
     "start_date" DATE NOT NULL,
-    "salary" DECIMAL(2,2) NOT NULL,
+    "salary" DECIMAL(8,2) NOT NULL,
     "boss_id" UUID REFERENCES "employee" ("uuid") ON DELETE SET NULL,
     "position_id" INT NOT NULL REFERENCES "position" ("id") ON DELETE CASCADE
 );

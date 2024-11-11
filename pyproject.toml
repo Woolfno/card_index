@@ -7,13 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-litestar = {extras = ["jinja"], version = "^2.12.1"}
+litestar = {extras = ["jinja", "jwt"], version = "^2.12.1"}
 tortoise-orm = {extras = ["asyncpg"], version = "^0.21.7"}
 pydantic-settings = "^2.6.0"
 pip = "^24.3.1"
 uvicorn = "^0.32.0"
 aerich = "^0.7.2"
 faker = "^30.8.2"
+passlib = "^1.7.4"
+bcrypt = "^4.2.0"
 
 
 
