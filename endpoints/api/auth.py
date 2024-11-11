@@ -13,14 +13,14 @@ class AuthController(Controller):
     path = "/auth"
 
     @post("login")
-    async def login(data:UserSchema)->Response[UserPydantic]:
+    async def login(self, data:UserSchema)->Response[UserPydantic]:
         user = await authenticate_user(data.username, data.password)
         if user is None:
             raise NotAuthorizedException    
         return jwt_auth.login(identifier=str(user.id))
 
     @post("signup")
-    async def signup(data:UserSchema)->Response[UserPydantic]:
+    async def signup(self, data:UserSchema)->Response[UserPydantic]:
         try:
             user = await UserModel.create(username=data.username, password_hash=get_password_hash(data.password))
         except IntegrityError:
