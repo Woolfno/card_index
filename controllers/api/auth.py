@@ -6,7 +6,8 @@ from tortoise.exceptions import IntegrityError
 from models.user import User as UserModel
 from schemas.user import UserIn as UserSchema
 from schemas.user import UserPydantic
-from security.jwt import authenticate_user, get_password_hash, jwt_auth
+from security.auth import authenticate_user, get_password_hash
+from security.jwt import jwt_auth
 
 
 class AuthController(Controller):
@@ -17,7 +18,7 @@ class AuthController(Controller):
         user = await authenticate_user(data.username, data.password)
         if user is None:
             raise NotAuthorizedException    
-        return jwt_auth.login(identifier=str(user.id))
+        return jwt_auth.login(identifier=str(user.id), response_body=UserPydantic.model_validate(user))
 
     @post("signup")
     async def signup(self, data:UserSchema)->Response[UserPydantic]:

@@ -6,11 +6,11 @@
 <form method="POST", action="/login">
     <div class="mb-3">
       <label for="username" class="form-label">Имя пользователя</label>
-      <input type="text" class="form-control" id="username">
+      <input type="text" class="form-control" id="username" name="username" data-property-name="username">
     </div>
     <div class="mb-3">
       <label for="Password" class="form-label">Пароль</label>
-      <input type="password" class="form-control" id="password">
+      <input type="password" class="form-control" id="password" name="password" data-property-name="password">
     </div>   
     <button type="submit" class="btn btn-primary">Отправить</button>
     {% if err is defined  %}
