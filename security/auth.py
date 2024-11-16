@@ -1,5 +1,5 @@
 from passlib.context import CryptContext
-
+from uuid import UUID
 from models.user import User as UserModel
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
