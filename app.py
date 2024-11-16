@@ -24,7 +24,7 @@ app = Litestar(
     template_config=TemplateConfig(directory=Path(__file__).parent / "templates", engine=JinjaTemplateEngine),    
     on_startup=[init_tortoise],
     on_shutdown=[shutdown_tortoise],
-    on_app_init=[session_auth.on_app_init, jwt_auth.on_app_init],
+    # on_app_init=[session_auth.on_app_init],
     )
 
 if __name__=="__main__":

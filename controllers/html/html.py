@@ -7,14 +7,14 @@ from litestar.response import Redirect, Template
 
 from schemas.user import UserIn, UserPydantic
 from security.auth import authenticate_user
+from security.guard.roles import guest_user_guard, authenticated_user_guard
 
 
 class HTMLController(Controller):
     include_in_schema=False
     
-    @get()
+    @get(path="/")
     async def index(self, request:"Request[UserPydantic,  Dict[str, str], Any]")->Template:
-        print(request.user.id)
         return Template(template_name="index.html", context={"main":True})
 
     @get("tree")
@@ -39,10 +39,11 @@ class HTMLController(Controller):
                 "err":"Неверное имя пользователя или пароль!"
             })
         # return jwt_cookie_auth.login(identifier=str(user.id), response_body=UserPydantic.model_validate(user, from_attributes=True))
-        request.set_session({"user_id":user.id})
+        # request.set_session({"user_id":user.id})
         return Redirect(path="/")
     
-    @delete("logout")
-    async def logout(self, request:Request[Any, Any, Any])->None:
+    @get("logout")
+    async def logout(self, request:Request[Any, Any, Any])->Redirect:
         if request.session:
-            request.clear_session()           
+            request.clear_session()
+        return Redirect("/")
