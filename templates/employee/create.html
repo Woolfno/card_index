@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div class="row justify-content-md-center">
+    <div class="col-md-4">
+        <form action="/employee/create" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="first_name">Фамилия</label>
+                <input class="form-control" type="text" name="first_name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="middle_mame">Имя</label>
+                <input class="form-control" type="text" name="middle_name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="last_name">Отчество</label>
+                <input class="form-control" type="text" name="last_name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="start_date">Начало работы</label>
+                <input class="form-control" type="date" name="start_date">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="salary">Зарплата</label>
+                <input class="form-control" type="number" min="0" step=".01" name="salary">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="position_id">Должность</label>
+                <select class="form-control" name="position_id" id="position">
+                    {% for pos in positions %}
+                    <option value="{{pos.id}}">{{ pos.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="boss">Начальник</label>
+                <select class="form-control" name="boss_id" id="boss">
+                    {% for boss in bosses %}
+                    <option value="{{boss.uuid}}">{{boss.full_name}}</option>
+                    {% endfor %}
+                </select>
+            </div>            
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a class="btn btn-secondary" role="button" href="#">Отмена</a>
+    </form>
+</div>
+</div>
+{% endblock %}
