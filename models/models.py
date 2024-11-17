@@ -8,6 +8,9 @@ class Position(Model):
     id=fields.IntField(primary_key=True)
     title = fields.CharField(max_length=100)
 
+    class Meta:
+        ordering = ["title"]
+
 class Employee(Model):
     uuid = fields.UUIDField(primary_key=True)
     boss = fields.ForeignKeyField("models.Employee", on_delete=fields.SET_NULL, null=True)
@@ -17,3 +20,7 @@ class Employee(Model):
     position = fields.ForeignKeyField("models.Position", related_name="employes")
     start_date = fields.DateField(default=datetime.datetime.now)
     salary = fields.DecimalField(max_digits=8, decimal_places=2)
+
+    @property
+    def full_name(self)->str:
+        return f"{self.first_name} {self.middle_name} {self.last_name}"

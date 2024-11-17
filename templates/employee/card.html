@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-md-center">
+        <div class="col-md-4 text-center">
+            <figure class="figure">
+                <img src="/static/img/girl.png" class="figure-img img-fluid rounded" alt="Фото сотрудника"
+                    style="width: 350px;">
+            </figure>
+        </div>
+        <div class="col-md-4">
+            <h3>{{ employee.full_name }}</h3>
+            <p><strong>Должность:</strong> {{ employee.position.title }}</p>
+            <p><strong>Дата начала работы:</strong> {{ employee.start_date }}</p>
+            <p><strong>Зарплата:</strong> {{ employee.salary }} руб.</p>
+            <p><strong>Начальник:</strong> {{ employee.boss.full_name }}</p>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <div class="btn-group" role="group">
+                <a href="/employee/edit/{{employee.uuid}}" type="button" class="btn btn-primary" ><span class="bi bi-pencil-square"></span>Редактировать</a>
+                <!-- <a href="/employee/create" type="button" class="btn btn-success"><span class="bi bi-plus-lg"></span>Добавить сотрудника</a> -->
+                <a href="/employee/delete/{{employee.uuid}}" type="button" class="btn btn-warning"><span class="bi bi-x-lg"></span>Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
