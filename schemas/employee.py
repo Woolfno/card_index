@@ -3,7 +3,7 @@ import uuid
 from decimal import Decimal
 from typing import ForwardRef, Optional
 from schemas.position import Position
-
+from litestar.datastructures import UploadFile
 from pydantic import BaseModel, Field, ConfigDict, computed_field
 
 
@@ -53,3 +53,8 @@ class EmployeeAll(EmployeeBase):
     @computed_field
     def full_name(self)->str:
         return f"{self.first_name} {self.middle_name} {self.last_name}"
+    
+class EmployeeWithPhoto(EmployeeIn):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    photo_file: Optional[UploadFile] = None

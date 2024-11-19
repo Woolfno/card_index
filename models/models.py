@@ -20,6 +20,7 @@ class Employee(Model):
     position = fields.ForeignKeyField("models.Position", related_name="employes")
     start_date = fields.DateField(default=datetime.datetime.now)
     salary = fields.DecimalField(max_digits=8, decimal_places=2)
+    photo_url = fields.CharField(max_length=255, null=True)
 
     @property
     def full_name(self)->str:

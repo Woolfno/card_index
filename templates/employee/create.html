@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row justify-content-md-center">
     <div class="col-md-4">
-        <form action="/employee/create" method="post">
+        <form action="/employee/create" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="first_name">Фамилия</label>
                 <input class="form-control" type="text" name="first_name">
@@ -15,6 +15,10 @@
             <div class="mb-3">
                 <label class="form-label" for="last_name">Отчество</label>
                 <input class="form-control" type="text" name="last_name">
+            </div>            
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Фотография</label>
+                <input class="form-control" type="file" name="photo_file" id="formFile">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="start_date">Начало работы</label>
