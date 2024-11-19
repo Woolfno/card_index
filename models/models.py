@@ -12,7 +12,7 @@ class Position(Model):
         ordering = ["title"]
 
 class Employee(Model):
-    uuid = fields.UUIDField(primary_key=True)
+    id = fields.UUIDField(primary_key=True)
     boss = fields.ForeignKeyField("models.Employee", on_delete=fields.SET_NULL, null=True)
     first_name = fields.CharField(max_length=120)
     middle_name = fields.CharField(max_length=120)

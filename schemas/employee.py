@@ -10,7 +10,7 @@ from pydantic import BaseModel, Field, ConfigDict, computed_field
 Employee = ForwardRef('Employee')
 
 class EmployeeId(BaseModel):    
-    id: uuid.UUID = Field(alias="uuid")
+    id: uuid.UUID
 
 class EmployeeBase(EmployeeId): 
     first_name: str

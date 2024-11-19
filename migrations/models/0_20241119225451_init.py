@@ -8,14 +8,20 @@ async def upgrade(db: BaseDBAsyncClient) -> str:
     "title" VARCHAR(100) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS "employee" (
-    "uuid" UUID NOT NULL  PRIMARY KEY,
+    "id" UUID NOT NULL  PRIMARY KEY,
     "first_name" VARCHAR(120) NOT NULL,
     "middle_name" VARCHAR(120) NOT NULL,
     "last_name" VARCHAR(120) NOT NULL,
     "start_date" DATE NOT NULL,
     "salary" DECIMAL(8,2) NOT NULL,
-    "boss_id" UUID REFERENCES "employee" ("uuid") ON DELETE SET NULL,
+    "photo_url" VARCHAR(255),
+    "boss_id" UUID REFERENCES "employee" ("id") ON DELETE SET NULL,
     "position_id" INT NOT NULL REFERENCES "position" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "user" (
+    "id" UUID NOT NULL  PRIMARY KEY,
+    "username" VARCHAR(50) NOT NULL UNIQUE,
+    "password_hash" VARCHAR(256)
 );
 CREATE TABLE IF NOT EXISTS "aerich" (
     "id" SERIAL NOT NULL PRIMARY KEY,
