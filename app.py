@@ -18,7 +18,8 @@ apiRoute = Router(path="/api", route_handlers=[employee_router, position_router,
 
 app = Litestar(    
     route_handlers=[
-        create_static_files_router(path="/static", directories=[Path(__file__).parent / "static"]),        
+        create_static_files_router(path="/static", directories=[Path(__file__).parent / "static"]),       
+        create_static_files_router(path=settings.MEDIA_URL, directories=[settings.MEDIA_ROOT]),
         Router(path="/", route_handlers=[HTMLController, EmployeeController]),
         apiRoute,
     ],

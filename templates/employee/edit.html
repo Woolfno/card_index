@@ -3,7 +3,7 @@
 {% block content %}
 <div class="row justify-content-md-center">
     <div class="col-md-4">
-        <form action="/employee/edit/{{employee.uuid}}" method="post">
+        <form action="/employee/edit/{{employee.uuid}}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="first_name">Фамилия</label>
                 <input class="form-control" type="text" name="first_name" value="{{employee.first_name}}">
@@ -16,13 +16,15 @@
                 <label class="form-label" for="last_name">Отчество</label>
                 <input class="form-control" type="text" name="last_name" value="{{employee.last_name}}">
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="position_id">Должность</label>
-                <select class="form-control" name="position_id" id="position">
-                    {% for pos in positions %}
-                    <option value="{{pos.id}}" {% if employee.position_id==pos.id %}selected{% endif %}>{{ pos.title }}</option>
-                    {% endfor %}
-                </select>
+            <label for="formFile" class="form-label">Фотография</label>
+            <div class="col-md-4 text-center">
+                <figure class="figure">
+                    <img src="{{ employee.photo_url }}" class="figure-img img-fluid rounded" alt="Фото сотрудника"
+                        style="width: 350px;">
+                </figure>
+            </div>
+            <div class="mb-3">                
+                <input class="form-control" type="file" name="photo_file" id="formFile">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="start_date">Начало работы</label>
@@ -31,15 +33,23 @@
             <div class="mb-3">
                 <label class="form-label" for="salary">Зарплата</label>
                 <input class="form-control" type="number" min="0" step=".01" name="salary" value="{{employee.salary}}">
-            </div>            
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="position_id">Должность</label>
+                <select class="form-control" name="position_id" id="position">
+                    {% for pos in positions %}
+                    <option value="{{pos.id}}">{{ pos.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="mb-3">
                 <label class="form-label" for="boss">Начальник</label>
                 <select class="form-control" name="boss_id" id="boss">
                     {% for boss in bosses %}
-                    <option value="{{boss.uuid}}" {% if employee.boss_id==boss.uuid %}selected{% endif %}>{{boss.full_name}}</option>
+                    <option value="{{boss.uuid}}">{{boss.full_name}}</option>
                     {% endfor %}
                 </select>
-            </div>            
+            </div>         
     <button type="submit" class="btn btn-primary">Сохранить</button>
     <a class="btn btn-secondary" role="button" href="/employee/{{employee.uuid}}">Отмена</a>
     </form>
