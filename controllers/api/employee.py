@@ -15,7 +15,7 @@ from schemas.user import UserPydantic as User
 
 async def get_employee(emp:models.Employee)->models.Employee:
     emp.position = await models.Position.get_or_none(id=emp.position_id)
-    emp.boss = await models.Employee.get_or_none(uuid=emp.boss_id).prefetch_related('position')    
+    emp.boss = await models.Employee.get_or_none(id=emp.boss_id).prefetch_related('position')    
     if emp.boss is None:
         return emp
     emp.boss = await get_employee(emp.boss)
@@ -39,7 +39,7 @@ class EmployeeController(Controller):
     
     @get("/{id:uuid}")
     async def get_by_id(self, id:uuid.UUID)->employee.Employee:       
-        emp = await  models.Employee.get_or_none(uuid=id).prefetch_related('position', 'boss')
+        emp = await  models.Employee.get_or_none(id=id).prefetch_related('position', 'boss')
         if emp is None:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND)
         if emp.boss is not None:
@@ -58,4 +58,4 @@ class EmployeeController(Controller):
 
     @delete("/{id:uuid}")
     async def remove(self, id: uuid.UUID)->None:
-        await models.Employee.filter(uuid=id).delete()
+        await models.Employee.filter(id=id).delete()

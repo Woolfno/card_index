@@ -55,11 +55,11 @@ class EmployeeController(Controller):
                                   photo_url=self._get_fileurl(filename))
         filepath = self._get_filepath(filename)
         await self._save_file(data.photo_file, filepath)
-        return Redirect(path=f"/employee/{e.uuid}") 
+        return Redirect(path=f"/employee/{e.id}") 
     
     @get("/edit/{id:uuid}")
     async def update_form(self, id:UUID)->Template:
-        e = await Employee.get_or_none(uuid=id)
+        e = await Employee.get_or_none(id=id)
         if e is None:
             raise NotFoundException
         positions = await Position.all()
@@ -73,19 +73,19 @@ class EmployeeController(Controller):
                      id:UUID)->Redirect:        
         try:
             async with in_transaction() as connection:
-                e = await Employee.get_or_none(uuid=id, using_db=connection)             
+                e = await Employee.get_or_none(id=id, using_db=connection)             
                 if e is None:
                     raise NotFoundException
                 if data.photo_file is not None:
                     filename = self._generate_filename(data.photo_file.filename)
                     filepath = self._get_filepath(filename)
                     await self._save_file(data.photo_file, filepath)
-                    await Employee.filter(uuid=id).using_db(connection).update(
+                    await Employee.filter(id=id).using_db(connection).update(
                         **data.model_dump(exclude_unset=True, exclude_none=True, exclude="photo_file"), 
                         photo_url=self._get_fileurl(filename),
                         )
                 else:
-                    await Employee.filter(uuid=id).using_db(connection).update(
+                    await Employee.filter(id=id).using_db(connection).update(
                         **data.model_dump(exclude_unset=True, exclude_none=True),
                         )                    
         except OperationalError:
@@ -94,7 +94,7 @@ class EmployeeController(Controller):
     
     @get("/{id:uuid}")
     async def get_employee(self, id:UUID)->Template:
-        e = await Employee.get_or_none(uuid=id).prefetch_related("position", "boss")
+        e = await Employee.get_or_none(id=id).prefetch_related("position", "boss")
         if e is None:
             raise NotFoundException
         return Template(template_name="employee/card.html", 
@@ -102,7 +102,7 @@ class EmployeeController(Controller):
     
     @get("/delete/{id:uuid}")
     async def delete_employee(self, id:UUID)->Redirect:
-        e = await Employee.get_or_none(uuid=id)
+        e = await Employee.get_or_none(id=id)
         if e is None:
             return Redirect("/table")
         await e.delete()

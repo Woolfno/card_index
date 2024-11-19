@@ -20,7 +20,7 @@ async def create_employee(fake:Faker, func_fake_position, boss_ids:list[UUID], c
         position, _ = await Position.get_or_create(title=func_fake_position())
         emp = await Employee.create(first_name=fake.first_name(), middle_name=fake.middle_name(), last_name=fake.last_name(), 
                         salary=random.randint(500, 3000), start_date=fake.date(), position_id=position.id, boss_id=random.choice(boss_ids))
-        empl_ids.append(emp.uuid)
+        empl_ids.append(emp.id)
     
     return empl_ids
 
@@ -39,7 +39,7 @@ async def run():
                         salary=random.randint(500, 3000), start_date=fake.date(), position_id=position.id, boss_id=None)
 
     # managers
-    manager_ids = await create_employee(fake, fake.manager, [boss.uuid], MANAGERS)
+    manager_ids = await create_employee(fake, fake.manager, [boss.id], MANAGERS)
 
     # specialists
     specialist_ids = await create_employee(fake, fake.specialist, manager_ids, SPECIALISTS)
