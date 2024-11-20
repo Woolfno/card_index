@@ -102,9 +102,10 @@ class EmployeeController(Controller):
     
     @get("/delete/{id:uuid}")
     async def delete_employee(self, id:UUID)->Redirect:
-        e = await Employee.get_or_none(id=id)
-        if e is None:
-            return Redirect("/table")
-        await e.delete()
-        return Redirect("/table")
+        async with in_transaction() as connection:
+            e = await Employee.get_or_none(id=id, using_db=connection)
+            if e is None:
+                return Redirect("/tree")
+            await e.delete(using_db=connection)
+            return Redirect("/tree")
     

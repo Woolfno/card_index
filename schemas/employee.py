@@ -39,7 +39,7 @@ class EmployeeIn(BaseModel):
     start_date: datetime.date
     salary: Decimal
     position_id: int
-    boss_id: uuid.UUID = None
+    boss_id: Optional[uuid.UUID] = None
 
 class EmployeeAll(EmployeeBase):   
     model_config = ConfigDict(from_attributes=True)

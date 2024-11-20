@@ -31,9 +31,11 @@
         data.items.forEach(element => {
           arr.push(
             [{
-              'v': element.id, 'f':
+              'v': element.id, 'f':              
                 `<div class="card-client">    
+                    <a href="/employee/${element.id}">
                     <p class="name-client">${element.full_name}
+                    </a>
                     <span>${element.position.title}</span>
                     </p>
                     <div class="social-media">

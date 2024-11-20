@@ -1,7 +1,9 @@
 import datetime
 
-from tortoise import fields
+from tortoise import fields, BaseDBAsyncClient
 from tortoise.models import Model
+from tortoise.signals import pre_delete
+from typing import Type, Optional
 
 
 class Position(Model):
@@ -25,3 +27,9 @@ class Employee(Model):
     @property
     def full_name(self)->str:
         return f"{self.first_name} {self.middle_name} {self.last_name}"
+
+@pre_delete(Employee)
+async def signal_pre_delete(sender:Type[Employee], 
+                            instance:Employee, 
+                            using_db:Optional[BaseDBAsyncClient])->None:
+    await sender.filter(boss_id=instance.id).using_db(using_db).update(boss_id=instance.boss_id)
