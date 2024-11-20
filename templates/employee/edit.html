@@ -45,6 +45,7 @@
             <div class="mb-3">
                 <label class="form-label" for="boss">Начальник</label>
                 <select class="form-control" name="boss_id" id="boss">
+                    <option></option>
                     {% for boss in bosses %}
                     <option value="{{boss.id}}" {% if employee.boss_id==boss.id %}selected{% endif %}>{{boss.full_name}}</option>
                     {% endfor %}
