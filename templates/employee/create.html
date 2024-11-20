@@ -40,7 +40,7 @@
                 <label class="form-label" for="boss">Начальник</label>
                 <select class="form-control" name="boss_id" id="boss">
                     {% for boss in bosses %}
-                    <option value="{{boss.uuid}}">{{boss.full_name}}</option>
+                    <option value="{{boss.id}}">{{boss.full_name}}</option>
                     {% endfor %}
                 </select>
             </div>            
