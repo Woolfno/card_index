@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block head %}
+<link rel="stylesheet" href="static/js/dist/themes/default/style.min.css" />
+{% endblock%}
+{% block title %}Картотека{% endblock %}
+{% block content %}
+<div class="row my-20">
+    <div class="col-3">
+        <div id="jstree_div"></div>
+    </div>
+    <div class="col">
+        <div id="card" style="display: none;">
+            <div class="row left-content-md-center">
+                <div class="col-md-4 text-center">
+                    <figure class="figure">
+                        <img id="photo" src="" class="figure-img img-fluid rounded" alt="Фото сотрудника"
+                            style="width: 350px;">
+                    </figure>
+                </div>
+                <div class="col-md-4">
+                    <h3 id="full_name"></h3>
+                    <p><strong>Должность:</strong><span id="position"></span></p>
+                    <p><strong>Дата начала работы:</strong><span id="start_date"></span></p>
+                    <p><strong>Зарплата:</strong><span id="salary"></span> руб.</p>
+                    <p><strong>Начальник:</strong><span id="boss_full_name"></span></p>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col-md-4">
+                    <div class="btn-group" role="group">
+                        <a href="/employee/edit/employee.id" type="button" class="btn btn-primary"><span
+                                class="bi bi-pencil-square"></span>Редактировать</a>
+                        <!-- <a href="/employee/create" type="button" class="btn btn-success"><span class="bi bi-plus-lg"></span>Добавить сотрудника</a> -->
+                        <a href="/employee/delete/employee.id" type="button" class="btn btn-warning"><span
+                                class="bi bi-x-lg"></span>Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+<script src="static/js/dist/jstree.min.js"></script>
+<script>
+    $(function () {
+        $('#jstree_div').jstree({
+            'core': {
+                'data': {
+                    'url': 'api/ajax/employee/',
+                    'data': function (node) {
+                        return { 'id': node.id };
+                    }
+                },
+            }
+        });
+    });
+    $('#jstree_div').on("changed.jstree", function (e, data) {
+        $.get(`/api/employee/${data.selected}`, function (d) {
+            $('#card').show();
+            $('#photo').attr('src', d.photo_url);
+            $('#full_name').html(d.full_name).show();
+            $('#position').html(d.position.title).show();
+            $('#start_date').html(d.start_date).show();
+            $('#salary').html(d.salary).show();
+            $('#boss_full_name').html(d.boss === null ? "" : d.boss.full_name).show();
+        })
+    });  
+</script>
+{% endblock %}

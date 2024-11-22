@@ -47,3 +47,7 @@ class HTMLController(Controller):
         if request.session:
             request.clear_session()
         return Redirect("/")
+    
+    @get("cards")
+    async def js_tree(self)->Template:
+        return Template(template_name="jstree.html", context={"cards":True})

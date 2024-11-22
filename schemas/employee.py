@@ -25,6 +25,7 @@ class Employee(EmployeeBase):
     first_name: str = Field(exclude=True)
     middle_name: str = Field(exclude=True)
     last_name: str = Field(exclude=True)
+    photo_url: Optional[str] = None
     boss: Optional[Employee] = None
     position: Position
 
