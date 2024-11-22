@@ -1,5 +1,5 @@
 from typing import Any
-import uuid
+from uuid import UUID
 from pprint import pprint
 from litestar import Controller, delete, get, patch, post, Request
 from litestar.exceptions import HTTPException
@@ -26,7 +26,7 @@ class EmployeeController(Controller):
     path = "/employee"
 
     @get("/")
-    async def list(self, limit:int=-1, offset:int=0)->OffsetPagination[employee.EmployeeAll]:
+    async def get_list(self, limit:int=-1, offset:int=0)->OffsetPagination[employee.EmployeeAll]:
         total = await models.Employee.all().count()
         lst = await models.Employee.all().prefetch_related('position')
         ta = TypeAdapter(list[employee.EmployeeAll])
@@ -38,7 +38,7 @@ class EmployeeController(Controller):
         )
     
     @get("/{id:uuid}")
-    async def get_by_id(self, id:uuid.UUID)->employee.Employee:       
+    async def get_by_id(self, id:UUID)->employee.Employee:       
         emp = await  models.Employee.get_or_none(id=id).prefetch_related('position', 'boss')
         if emp is None:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND)
@@ -52,10 +52,10 @@ class EmployeeController(Controller):
         return employee.Employee.model_validate(empl)
     
     @patch("/{id:uuid}")
-    async def update(self, id:uuid.UUID, data:employee.EmployeeIn)->employee.Employee:
+    async def update(self, id:UUID, data:employee.EmployeeIn)->employee.Employee:
         emp = await models.Employee.update_from_dict(data.model_dump(exclude_none=True, exclude_unset=True))
         return employee.Employee.model_validate(emp)
 
     @delete("/{id:uuid}")
-    async def remove(self, id: uuid.UUID)->None:
+    async def remove(self, id: UUID)->None:
         await models.Employee.filter(id=id).delete()
