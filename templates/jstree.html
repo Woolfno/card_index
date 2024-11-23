@@ -6,7 +6,8 @@
 {% block content %}
 <div class="row my-20">
     <div class="col-3">
-        <div id="jstree_div"></div>
+        <div id="jstree_div">            
+        </div>
     </div>
     <div class="col">
         <div id="card" style="display: none;">
@@ -28,10 +29,9 @@
             <div class="row justify-content-md-center">
                 <div class="col-md-4">
                     <div class="btn-group" role="group">
-                        <a href="/employee/edit/employee.id" type="button" class="btn btn-primary"><span
+                        <a href="/employee/edit/employee.id" type="button" id="editButton" class="btn btn-primary"><span
                                 class="bi bi-pencil-square"></span>Редактировать</a>
-                        <!-- <a href="/employee/create" type="button" class="btn btn-success"><span class="bi bi-plus-lg"></span>Добавить сотрудника</a> -->
-                        <a href="/employee/delete/employee.id" type="button" class="btn btn-warning"><span
+                        <a href="/employee/delete/employee.id" id="deleteButton" type="button" class="btn btn-warning"><span
                                 class="bi bi-x-lg"></span>Удалить</a>
                     </div>
                 </div>
@@ -41,22 +41,41 @@
 </div>
 {% endblock %}
 {% block footer %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.1/jquery.js"></script>
 <script src="static/js/dist/jstree.min.js"></script>
 <script>
     $(function () {
-        $('#jstree_div').jstree({
-            'core': {
-                'data': {
+        $("#jstree_div").jstree({
+            "core": {
+                "check_callback": true,
+                "data": {
                     'url': 'api/ajax/employee/',
                     'data': function (node) {
                         return { 'id': node.id };
                     }
                 },
+            },
+            "plugins": ["dnd"],      
+            "dnd":{
+                "copy": false,
             }
         });
     });
-    $('#jstree_div').on("changed.jstree", function (e, data) {
+
+    $(document).on("dnd_stop.vakata", function(e, data){
+        employee_id = data.data.nodes[0];
+        t = $(data.event.target);
+        target_boss_id = t.closest('.jstree-node').attr("id");
+       
+        $.ajax({
+            url: `/api/employee/${employee_id}/boss`,
+            method: "PUT",
+            dataType: "JSON",
+            data: `{"id": "${target_boss_id}"}`,            
+        });     
+    });
+
+    $("#jstree_div").on("changed.jstree", function (e, data) {
         $.get(`/api/employee/${data.selected}`, function (d) {
             $('#card').show();
             $('#photo').attr('src', d.photo_url);
@@ -65,6 +84,8 @@
             $('#start_date').html(d.start_date).show();
             $('#salary').html(d.salary).show();
             $('#boss_full_name').html(d.boss === null ? "" : d.boss.full_name).show();
+            $('#editButton').attr("href", `/employee/edit/${d.id}`);
+            $('#deleteButton').attr("href", `/employee/delete/${d.id}`);
         })
     });  
 </script>

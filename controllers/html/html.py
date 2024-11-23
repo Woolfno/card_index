@@ -1,13 +1,13 @@
 from typing import Annotated, Any, Dict
 
-from litestar import Controller, Request, delete, get, post
+from litestar import Controller, Request, get, post
 from litestar.enums import RequestEncodingType
 from litestar.params import Body
 from litestar.response import Redirect, Template
 
 from schemas.user import UserIn, UserPydantic
 from security.auth import authenticate_user
-from security.guard.roles import guest_user_guard, authenticated_user_guard
+from security.guard.roles import authenticated_user_guard, guest_user_guard
 
 
 class HTMLController(Controller):

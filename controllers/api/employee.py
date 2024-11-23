@@ -1,16 +1,14 @@
-from typing import Any
 from uuid import UUID
-from pprint import pprint
-from litestar import Controller, delete, get, patch, post, Request
-from litestar.exceptions import HTTPException
+
+from litestar import Controller, delete, get, patch, post, put
+from litestar.exceptions import HTTPException, NotFoundException
 from litestar.pagination import OffsetPagination
-from litestar.status_codes import HTTP_404_NOT_FOUND
-from litestar.security.jwt.token import Token
+from litestar.status_codes import HTTP_404_NOT_FOUND, HTTP_200_OK
+from tortoise.transactions import in_transaction
 from pydantic import TypeAdapter
 
 from models import models
 from schemas import employee
-from schemas.user import UserPydantic as User
 
 
 async def get_employee(emp:models.Employee)->models.Employee:
@@ -59,3 +57,14 @@ class EmployeeController(Controller):
     @delete("/{id:uuid}")
     async def remove(self, id: UUID)->None:
         await models.Employee.filter(id=id).delete()
+
+    @put("/{id:uuid}/boss/", status_code=HTTP_200_OK)
+    async def change_boss(self, id:UUID, data:employee.EmployeeId)->None:
+        async with in_transaction() as connection:
+            emp = await models.Employee.get_or_none(id=id, using_db=connection)
+            if emp is None:
+                raise NotFoundException
+            new_boss = await models.Employee.get_or_none(id=data.id, using_db=connection)
+            if new_boss is None:
+                raise NotFoundException
+            await models.Employee.filter(id=id).using_db(connection).update(boss_id=new_boss.id)        
