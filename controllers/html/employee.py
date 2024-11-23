@@ -4,11 +4,9 @@ from uuid import UUID
 from litestar import get, post
 from litestar.controller import Controller
 from litestar.enums import RequestEncodingType
-from litestar.exceptions import InternalServerException, NotFoundException
+from litestar.exceptions import NotFoundException
 from litestar.params import Body
 from litestar.response import Redirect, Template
-from tortoise.exceptions import OperationalError
-from tortoise.transactions import in_transaction
 
 from models.models import Employee, Position
 from schemas.employee import EmployeeIn, EmployeeWithPhoto
