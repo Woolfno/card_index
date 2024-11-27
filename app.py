@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import uvicorn
 from litestar import Litestar, Router
 from litestar.contrib.jinja import JinjaTemplateEngine
 from litestar.static_files import create_static_files_router
@@ -25,11 +24,4 @@ app = Litestar(
     on_startup=[init_tortoise],
     on_shutdown=[shutdown_tortoise],
     # on_app_init=[session_auth.on_app_init],
-    )
-
-if __name__=="__main__":
-    uvicorn.run(
-        "app:app",
-        host=settings.host,
-        port=settings.port
     )
