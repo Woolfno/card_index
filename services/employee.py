@@ -39,16 +39,19 @@ class EmployeeService:
         return await Employee.get_or_none(id=id).prefetch_related("position", "boss")
 
     @staticmethod
-    async def create(employee:EmployeeIn, photo_file:UploadFile)->Employee:
-        filename = EmployeeService._generate_filename(photo_file.filename)
-        e = await Employee.create(**employee.model_dump(exclude_none=True, exclude_unset=True),
-                                  photo_url=EmployeeService._get_fileurl(filename))
-        filepath = EmployeeService._get_filepath(filename)
-        await EmployeeService._save_file(photo_file, filepath)
+    async def create(employee:EmployeeIn, photo_file:UploadFile|None)->Employee:
+        if photo_file is not None:
+            filename = EmployeeService._generate_filename(photo_file.filename)
+            e = await Employee.create(**employee.model_dump(exclude_none=True, exclude_unset=True),
+                                    photo_url=EmployeeService._get_fileurl(filename))
+            filepath = EmployeeService._get_filepath(filename)
+            await EmployeeService._save_file(photo_file, filepath)
+        else:
+            e = await Employee.create(**employee.model_dump(exclude_none=True, exclude_unset=True))
         return e
     
     @staticmethod
-    async def update(id:UUID, employee:EmployeeIn, photo_file:UploadFile)->Employee:
+    async def update(id:UUID, employee:EmployeeIn, photo_file:UploadFile|None)->Employee:
         try:
             async with in_transaction() as connection:
                 e = await Employee.get_or_none(id=id, using_db=connection)             

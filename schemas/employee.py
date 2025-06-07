@@ -33,6 +33,10 @@ class Employee(EmployeeBase):
     def full_name(self)->str:
         return f"{self.first_name} {self.middle_name} {self.last_name}"
 
+class EmployeeShort(EmployeeBase):
+    position_id:int
+    boss_id:Optional[uuid.UUID] = None
+
 class EmployeeIn(BaseModel):
     first_name: str
     middle_name: str
@@ -40,6 +44,15 @@ class EmployeeIn(BaseModel):
     start_date: datetime.date
     salary: Decimal
     position_id: int
+    boss_id: Optional[uuid.UUID] = None
+
+class EmployeeUpdate(BaseModel):
+    first_name: Optional[str] = None
+    middle_name: Optional[str] = None
+    last_name: Optional[str] = None
+    start_date: Optional[datetime.date] = None
+    salary: Optional[Decimal] = None
+    position_id: Optional[int] = None
     boss_id: Optional[uuid.UUID] = None
 
 class EmployeeAll(EmployeeBase):   

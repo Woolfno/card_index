@@ -1,9 +1,9 @@
 from uuid import UUID
 
 from litestar import Controller, delete, get, patch, post, put
-from litestar.exceptions import HTTPException, NotFoundException
+from litestar.exceptions import NotFoundException
 from litestar.pagination import OffsetPagination
-from litestar.status_codes import HTTP_404_NOT_FOUND, HTTP_200_OK
+from litestar.status_codes import HTTP_200_OK
 from tortoise.transactions import in_transaction
 from pydantic import TypeAdapter
 
@@ -39,20 +39,25 @@ class EmployeeController(Controller):
     async def get_by_id(self, id:UUID)->employee.Employee:       
         emp = await  models.Employee.get_or_none(id=id).prefetch_related('position', 'boss')
         if emp is None:
-            raise HTTPException(status_code=HTTP_404_NOT_FOUND)
+            raise NotFoundException
         if emp.boss is not None:
             emp.boss = await get_employee(emp.boss)
         return employee.Employee.model_validate(emp)
     
     @post()
-    async def create(self, data:employee.EmployeeIn)->employee.Employee:
+    async def create(self, data:employee.EmployeeIn)->employee.EmployeeShort:
         empl = await models.Employee.create(**data.model_dump(exclude_unset=True, exclude_none=True))
-        return employee.Employee.model_validate(empl)
+        return employee.EmployeeShort.model_validate(empl, from_attributes=True)
     
     @patch("/{id:uuid}")
-    async def update(self, id:UUID, data:employee.EmployeeIn)->employee.Employee:
-        emp = await models.Employee.update_from_dict(data.model_dump(exclude_none=True, exclude_unset=True))
-        return employee.Employee.model_validate(emp)
+    async def update(self, id:UUID, data:employee.EmployeeUpdate)->employee.EmployeeShort:
+        async with in_transaction() as connection:
+            emp = await models.Employee.get_or_none(id=id, using_db=connection)
+            if emp is None:
+                raise NotFoundException
+            emp = await emp.update_from_dict(data.model_dump(exclude_none=True, exclude_unset=True))
+            await emp.save(using_db=connection)
+            return employee.EmployeeShort.model_validate(emp, from_attributes=True)
 
     @delete("/{id:uuid}")
     async def remove(self, id: UUID)->None:
