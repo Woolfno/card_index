@@ -27,9 +27,15 @@ class EmployeeController(Controller):
     @post("/create")
     async def create(self,
                      data:Annotated[EmployeeWithPhoto, Body(media_type=RequestEncodingType.MULTI_PART)])->Redirect:        
-        employe_in = EmployeeIn(**data.model_dump(exclude="photo_file"))        
+        employe_in = EmployeeIn(**data.model_dump(exclude=("photo_file")))        
         e = await EmployeeService.create(employe_in, data.photo_file)
         return Redirect(path=f"/employee/{e.id}") 
+    
+    # @post("/create")
+    # async def create(self,
+    #                  data:Annotated[EmployeeIn, Body(media_type=RequestEncodingType.URL_ENCODED)])->Redirect:        
+    #     e = await EmployeeService.create(data, None)
+    #     return Redirect(path=f"/employee/{e.id}") 
     
     @get("/edit/{id:uuid}")
     async def update_form(self, id:UUID)->Template:

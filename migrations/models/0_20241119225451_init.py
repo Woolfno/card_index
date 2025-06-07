@@ -33,4 +33,7 @@ CREATE TABLE IF NOT EXISTS "aerich" (
 
 async def downgrade(db: BaseDBAsyncClient) -> str:
     return """
-        """
+    DROP TABLE IF EXISTS employee;
+    DROP TABLE IF EXISTS position;
+    DROP TABLE IF EXISTS "user";
+    """

@@ -5,7 +5,7 @@ from uuid import UUID
 
 from faker import Faker
 from fake_data.job_provider import JobProvider
-from tortoise import Tortoise, run_async
+from tortoise import Tortoise, run_async, connections
 
 from db.db import TORTOISE_ORM
 from models.models import Employee, Position
@@ -24,7 +24,7 @@ async def create_employee(fake:Faker, func_fake_position, boss_ids:list[UUID], c
     
     return empl_ids
 
-async def run():
+async def run(TORTOISE_ORM):
     await Tortoise.init(TORTOISE_ORM)
     await Tortoise.generate_schemas()
 
@@ -48,4 +48,7 @@ async def run():
     other_ids = await create_employee(fake, fake.other, specialist_ids, int(OTHERS*0.6))
     await create_employee(fake, fake.other, other_ids, int(OTHERS*0.4))
 
-run_async(run())
+    await connections.close_all()
+
+if __name__=="__main__":
+    run_async(run(TORTOISE_ORM))
