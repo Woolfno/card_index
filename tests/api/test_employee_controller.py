@@ -1,13 +1,14 @@
 import uuid
 from datetime import datetime
 from decimal import Decimal
-import json
+
 import pytest
-from litestar.status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from litestar.status_codes import (HTTP_200_OK, HTTP_201_CREATED,
+                                   HTTP_204_NO_CONTENT)
 from litestar.testing import AsyncTestClient
 
 from models.models import Employee
-from schemas.employee import EmployeeIn, EmployeeShort
+from schemas.employee import EmployeeShort
 
 
 @pytest.fixture(scope="function")
