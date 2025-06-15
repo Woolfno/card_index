@@ -1,3 +1,4 @@
+import os
 import sys
 from collections.abc import AsyncIterator
 from pathlib import Path
@@ -11,12 +12,17 @@ from litestar.testing import AsyncTestClient
 from tortoise import Tortoise, connections
 
 sys.path.append(str(Path(__file__).parent.parent))
-from app import app
 import generate_fake_data
+from app import app
+
 
 app.debug = True
 
-config = dotenv_values("tests/.env.test")
+config = {
+    **dotenv_values("tests/.env.test"),
+    **os.environ,
+}
+
 DATABASE_URL = config["DATABASE_URL"]
 
 TORTOISE_ORM = {
