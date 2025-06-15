@@ -28,6 +28,8 @@ __pypackages__/
 .venv
 .env
 .env.*
+.env
+.env.*
 
 # pytype static type analyzer
 .pytype/
