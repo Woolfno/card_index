@@ -33,5 +33,6 @@ __pypackages__/
 .pytype/
 
 media/*
+!media/.gitkeep
 
 .vscode/*
