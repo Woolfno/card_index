@@ -16,7 +16,7 @@ jobs:
             ports:
                 - 5432:5432  
     env:
-      DATABASE_URL: "postgres://postgres:postgres@postgres:5432/cardindex_test"  
+      DATABASE_URL: "postgres://postgres:postgres@localhost:5432/cardindex_test"  
     steps:
         - name: Checkout repository
           uses: actions/checkout@v4
