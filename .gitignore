@@ -35,4 +35,4 @@ __pypackages__/
 media/*
 !media/.gitkeep
 
-.vscode/*
+.vscode/
