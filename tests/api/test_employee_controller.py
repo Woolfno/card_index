@@ -113,3 +113,6 @@ async def test_employee_change_boss(employee:Employee, boss:Employee, client:Asy
         result = cursor.fetchone()
         assert result is not None
         assert result[0] == str(boss.id)
+
+def test_me():
+    assert 1==2
