@@ -45,8 +45,9 @@ jobs:
     steps:
       - name: Setup java
         uses: actions/setup-java@v3
-        with:
+        with:          
           java-version: "21"
+          distribution: "microsoft"
       - name: Setup Allure
         run: |
           sudo wget https://github.com/allure-framework/allure2/releases/download/2.23.1/allure-2.23.1.tgz 
