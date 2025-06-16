@@ -26,6 +26,7 @@ psycopg2 = "^2.9.10"
 pytest-cov = "^6.2.1"
 faker = "^30.8.2"
 python-dotenv = "^1.1.0"
+allure-pytest = "^2.14.3"
 
 [tool.pytest.ini_options]
 asyncio_default_fixture_loop_scope = "session"
